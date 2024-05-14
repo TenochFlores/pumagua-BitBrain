@@ -2,6 +2,8 @@ from django.shortcuts import render
 import folium
 from pumaguaAPP.models import bebederos
 from django.db.models import Q
+from django.shortcuts import redirect
+from .models import Reporte
 from folium.plugins import LocateControl
 import json
 import os
@@ -206,7 +208,8 @@ def index(request):
                 + "</h4>"
                 + '<img src="'
                 + imagenes_bebederos(coordenada.id_bebedero)
-                + '" width="150px" style="border-radius: 8px">',
+                + '" width="150px" style="border-radius: 8px">'
+                + "<a href='reportes/' target='_blank'> <button type='button' class='btn btn-primary'>Generar reporte</button></a>", 
                 icon=folium.Icon(icon=icon_shape, color=icon_color),
             ).add_to(m)
 
@@ -229,3 +232,38 @@ def imagenes_bebederos(id_bebedero):
 
 def informes(request):
     return render(request, "informes.html")
+
+def reportes(request):
+    return render(request, "reportes.html")
+
+def cargaReportes(request):
+    # Obtener todos los bebederos de la base de datos
+    bebederos_list = bebederos.objects.values_list('id_bebedero', 'nombre')
+    # Pasar los nombres de los bebederos al contexto del template
+    context = {
+        'bebederos': bebederos_list
+    }
+    if request.method == 'POST':
+        # Extraer datos del formulario
+        nombre = request.POST.get('nombre')
+        email = request.POST.get('email')
+        id_bebedero = request.POST.get('bebedero')
+        descripcion = request.POST.get('descripcion')  # Nuevo campo
+        dato_extra = request.POST.get('dato_extra', '')  # Nuevo campo, con un valor por defecto en caso de que esté vacío
+
+        # Obtener el objeto bebedero usando el ID
+        bebedero = bebederos.objects.get(pk=id_bebedero)
+        
+        # Crear y guardar el nuevo reporte
+        reporte = Reporte(
+            nombre=nombre, 
+            email=email, 
+            bebedero=bebedero, 
+            descripcion=descripcion,  # Agregar la descripción al modelo
+            dato_extra=dato_extra  # Agregar el dato extra al modelo
+        )
+        reporte.save()
+        return redirect('/')  # Redireccionar a inicio después de guardar
+
+    return render(request, 'reportes.html', context)
+
