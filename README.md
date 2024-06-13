@@ -1,2 +1,14 @@
 # pumagua-BitBrain
-Repositorio para el laboratorio de Diseño de Interfaces de Usuario
+
+Aplicación que muestra los bebederos disponibles en un campus mi universidad, <br/>
+viendo su disponibilidad y pudiendo reportar fallas.
+
+# Ejecición 
+
+Correr el siguiente comando situado en pumagua-BitBrain/P2:
+
+* conda activate pumagua
+
+Correr el siguiente comando situado en pumagua-BitBrain/P2/pumagua:
+
+* python manage.py runserver
