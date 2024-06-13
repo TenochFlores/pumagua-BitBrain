@@ -3,7 +3,7 @@
 Aplicación que muestra los bebederos disponibles en un campus mi universidad, <br/>
 viendo su disponibilidad y pudiendo reportar fallas.
 
-# Ejecición 
+# Ejecución 
 
 Correr el siguiente comando situado en pumagua-BitBrain/P2:
 
